@@ -2,14 +2,15 @@
 
 const pg = require('pg');
 const express = require('express');
-const bodyParser = require('body-parser');
+// const bodyParser = require('body-parser');
 
-const PORT = process.env.PORT;
 
 const app = express();
+const PORT = process.env.PORT;
+const CLIENT_URL = process.env.CLIENT_URL;
 
-const conString = 'postgres://postgres:1234@localhost:5432/postgres';
-const client = new pg.Client(conString);
+// const conString = 'postgres://postgres:1234@localhost:5432/postgres';
+const client = new pg.Client(process.env.DATABASE_URL);
 client.connect();
 
 app.get('/test', (req, res) => res.send('Hello World!'));
