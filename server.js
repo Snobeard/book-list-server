@@ -27,6 +27,18 @@ app.get('/api/v1/books', (request, response) => {
     .catch(err => console.log(err));
 });
 
+app.get('book/:id', (request, response) => {
+  client.query(`
+    SELECT * FROM books
+    WHERE book_id=$1;`,
+    [request.params.id]
+  )
+    .then(result => {
+      console.log(result);
+      response.send(result.rows)})
+    .catch(err => console.log(err));
+});
+
 app.get('*', (request, response) => response.redirect(CLIENT_URL));
 
 loadDB();
