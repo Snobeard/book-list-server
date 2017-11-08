@@ -39,7 +39,7 @@ app.get('/book/:id', (request, response) => {
     .catch(err => console.log(err));
 });
 
-app.post('/book', (request, response) => {
+app.post('/newbook', (request, response) => {
   client.query(`
     INSERT INTO books(title, author, isbn, image_url, description)
     VALUES ($1, $2, $3, $4, $5);`,
