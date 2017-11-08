@@ -3,7 +3,7 @@
 const pg = require('pg');
 const express = require('express');
 const fs = require('fs');
-// const bodyParser = require('body-parser');
+const bodyParser = require('body-parser');
 const cors = require('cors');
 
 
@@ -14,6 +14,8 @@ const CLIENT_URL = process.env.CLIENT_URL;
 // const conString = 'postgres://postgres:1234@localhost:5432/postgres';
 const client = new pg.Client(process.env.DATABASE_URL);
 client.connect();
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: true}));
 app.use(cors());
 
 
