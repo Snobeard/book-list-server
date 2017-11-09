@@ -43,7 +43,16 @@ app.get('/book/:id', (request, response) => {
     .catch(err => console.log(err));
 });
 
-// app.put('/book/update', )
+app.put('/book/update', bodyParser, (request, response) => { // eslint-disable-line
+  let {title, author, isbn, image_url, description} = request.body;
+  client.query(`
+    INSERT INTO books(title, author, isbn, image_url, description)
+    VALUES(${title}, ${author}, ${isbn}, ${image_url}, ${description})
+    WHERE book_id='${request.body.id}'
+    `)
+    .then(() => response.send('update complete'))
+    .catch(err => console.error(err))
+})
 
 app.post('/book/new', (request, response) => {
   client.query(`
