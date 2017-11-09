@@ -26,6 +26,7 @@ app.get('/test', (request, response) => response.send('Hello World!'));
 
 
 app.get('/api/v1/books', (request, response) => {
+  console.log('this is the get for the books');
   client.query(`
      SELECT book_id, title, author, image_url FROM books
      ORDER BY book_id ASC;
@@ -46,7 +47,8 @@ app.get('/book/:id', (request, response) => {
     .catch(err => console.log(err));
 });
 
-app.put('/book/update/:id', bodyParser, (request, response) => {
+app.put('/book/update/:id', (request, response) => {
+  console.log('this is working');
   let {title, author, isbn, image_url, description} = request.body;
   client.query(`
     UPDATE books
