@@ -12,8 +12,8 @@ const PORT = process.env.PORT;
 const CLIENT_URL = process.env.CLIENT_URL;
 
 // const conString = 'postgres://postgres:1234@localhost:5432/postgres';
-// heroku conString = 'postgres://imimnyjtvtzkse:9390585ccd0f14a989ad3c75b6d12b45c250fb841bdb5f8de6d656751f32e28d@ec2-184-72-255-211.compute-1.amazonaws.com:5432/d26u82r9rb34qr';
-// const client = new pg.Client(process.env.DATABASE_URL);
+// const conString = 'postgres://imimnyjtvtzkse:9390585ccd0f14a989ad3c75b6d12b45c250fb841bdb5f8de6d656751f32e28d@ec2-184-72-255-211.compute-1.amazonaws.com:5432/d26u82r9rb34qr';
+// const client = new pg.Client(conString);
 const client = new pg.Client(process.env.DATABASE_URL);
 client.connect();
 app.use(bodyParser.json());
@@ -70,6 +70,15 @@ app.post('/book/new', (request, response) => {
     if (err) console.error(err);
     response.send('insert complete');
   }
+})
+
+app.delete('/book/delete/:id', (request, response) => {
+  console.log('trying to delete');
+  client.query(`
+    DELETE FROM books
+    WHERE book_id=${request.params.id};
+    `)
+    .then(() => response.send(`deleted book with id ${request.params.id}`))
 })
 
 
