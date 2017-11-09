@@ -25,7 +25,8 @@ app.get('/test', (request, response) => response.send('Hello World!'));
 
 app.get('/api/v1/books', (request, response) => {
   client.query(`
-     SELECT book_id, title, author, image_url FROM books;
+     SELECT book_id, title, author, image_url FROM books
+     ORDER BY book_id ASC;
      `)
     .then(result => response.send(result.rows))
     .catch(err => console.log(err));
