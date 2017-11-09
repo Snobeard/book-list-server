@@ -51,9 +51,8 @@ app.put('/book/update', bodyParser, (request, response) => {
   client.query(`
     UPDATE books
     SET title=$1, author=$2, isbn=$3, image_url=$4, description=$5
-    WHERE book_id='${request.body.id}'
     `,
-  [title, author, isbn, image_url, description]
+    [title, author, isbn, image_url, description]
   )
     .then(() => response.send('update complete'))
     .catch(err => console.error(err))
