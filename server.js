@@ -12,6 +12,8 @@ const PORT = process.env.PORT;
 const CLIENT_URL = process.env.CLIENT_URL;
 
 // const conString = 'postgres://postgres:1234@localhost:5432/postgres';
+// const conString = 'postgres://imimnyjtvtzkse:9390585ccd0f14a989ad3c75b6d12b45c250fb841bdb5f8de6d656751f32e28d@ec2-184-72-255-211.compute-1.amazonaws.com:5432/d26u82r9rb34qr';
+// const client = new pg.Client(conString);
 const client = new pg.Client(process.env.DATABASE_URL);
 client.connect();
 app.use(bodyParser.json());
@@ -24,8 +26,10 @@ app.get('/test', (request, response) => response.send('Hello World!'));
 
 
 app.get('/api/v1/books', (request, response) => {
+  console.log('this is the get for the books');
   client.query(`
-     SELECT book_id, title, author, image_url FROM books;
+     SELECT book_id, title, author, image_url FROM books
+     ORDER BY book_id ASC;
      `)
     .then(result => response.send(result.rows))
     .catch(err => console.log(err));
@@ -38,12 +42,26 @@ app.get('/book/:id', (request, response) => {
     [request.params.id]
   )
     .then(result => {
-      console.log(result);
+      console.log('sending data')
       response.send(result.rows)})
     .catch(err => console.log(err));
 });
 
-app.post('/newbook', (request, response) => {
+app.put('/book/update/:id', (request, response) => {
+  console.log('this is working');
+  let {title, author, isbn, image_url, description} = request.body;
+  client.query(`
+    UPDATE books
+    SET title=$1, author=$2, isbn=$3, image_url=$4, description=$5
+    WHERE book_id=$6
+    `,
+    [title, author, isbn, image_url, description, request.params.id]
+  )
+    .then(() => response.send('update complete'))
+    .catch(err => console.error(err))
+})
+
+app.post('/book/new', (request, response) => {
   client.query(`
     INSERT INTO books(title, author, isbn, image_url, description)
     VALUES ($1, $2, $3, $4, $5);`,
@@ -53,6 +71,16 @@ app.post('/newbook', (request, response) => {
     response.send('insert complete');
   }
 })
+
+app.delete('/book/delete/:id', (request, response) => {
+  console.log('trying to delete');
+  client.query(`
+    DELETE FROM books
+    WHERE book_id=${request.params.id};
+    `)
+    .then(() => response.send(`deleted book with id ${request.params.id}`))
+})
+
 
 app.get('*', (request, response) => response.redirect(CLIENT_URL));
 
