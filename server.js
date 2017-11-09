@@ -38,6 +38,7 @@ app.get('/book/:id', (request, response) => {
     [request.params.id]
   )
     .then(result => {
+      console.log('sending data')
       response.send(result.rows)})
     .catch(err => console.log(err));
 });
