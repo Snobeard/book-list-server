@@ -46,10 +46,12 @@ app.get('/book/:id', (request, response) => {
 app.put('/book/update', bodyParser, (request, response) => { // eslint-disable-line
   let {title, author, isbn, image_url, description} = request.body;
   client.query(`
-    INSERT INTO books(title, author, isbn, image_url, description)
-    VALUES(${title}, ${author}, ${isbn}, ${image_url}, ${description})
+    UPDATE books
+    SET title=$1, author=$2, isbn=$3, image_url=$4, description=$5
     WHERE book_id='${request.body.id}'
-    `)
+    `,
+  [title, author, isbn, image_url, description]
+  )
     .then(() => response.send('update complete'))
     .catch(err => console.error(err))
 })
