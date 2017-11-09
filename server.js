@@ -43,7 +43,9 @@ app.get('/book/:id', (request, response) => {
     .catch(err => console.log(err));
 });
 
-app.post('/newbook', (request, response) => {
+// app.put('/book/update', )
+
+app.post('/book/new', (request, response) => {
   client.query(`
     INSERT INTO books(title, author, isbn, image_url, description)
     VALUES ($1, $2, $3, $4, $5);`,
@@ -53,6 +55,7 @@ app.post('/newbook', (request, response) => {
     response.send('insert complete');
   }
 })
+
 
 app.get('*', (request, response) => response.redirect(CLIENT_URL));
 
