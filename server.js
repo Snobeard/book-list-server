@@ -46,7 +46,7 @@ app.get('/book/:id', (request, response) => {
     .catch(err => console.log(err));
 });
 
-app.put('/book/update:id', bodyParser, (request, response) => {
+app.put('/book/update/:id', bodyParser, (request, response) => {
   let {title, author, isbn, image_url, description} = request.body;
   client.query(`
     UPDATE books
