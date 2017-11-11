@@ -10,6 +10,7 @@ const cors = require('cors');
 const app = express();
 const PORT = process.env.PORT;
 const CLIENT_URL = process.env.CLIENT_URL;
+const TOKEN = process.env.TOKEN;
 
 // const conString = 'postgres://postgres:1234@localhost:5432/postgres';
 // const conString = 'postgres://imimnyjtvtzkse:9390585ccd0f14a989ad3c75b6d12b45c250fb841bdb5f8de6d656751f32e28d@ec2-184-72-255-211.compute-1.amazonaws.com:5432/d26u82r9rb34qr';
@@ -28,7 +29,7 @@ app.get('/test', (request, response) => response.send('Hello World!'));
 app.get('/api/v1/books', (request, response) => {
   console.log('this is the get for the books');
   client.query(`
-     SELECT book_id, title, author, image_url FROM books
+     SELECT book_id, title, author, image_url, isbn FROM books
      ORDER BY book_id ASC;
      `)
     .then(result => response.send(result.rows))
@@ -46,6 +47,16 @@ app.get('/book/:id', (request, response) => {
       response.send(result.rows)})
     .catch(err => console.log(err));
 });
+
+app.get('/admin', (request, response) => {
+  if (request.query.token === TOKEN) {
+    console.log('token: ', true);
+    response.send(true)
+  } else {
+    console.log('token: ', false);
+    response.send(false);
+  }
+})
 
 app.put('/book/update/:id', (request, response) => {
   console.log('this is working');
