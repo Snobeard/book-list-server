@@ -10,11 +10,12 @@ const cors = require('cors');
 const app = express();
 const PORT = process.env.PORT;
 const CLIENT_URL = process.env.CLIENT_URL;
+const TOKEN = process.env.TOKEN;
 
-// const conString = 'postgres://postgres:1234@localhost:5432/postgres';
+const conString = 'postgres://postgres:1234@localhost:5432/postgres';
 // const conString = 'postgres://imimnyjtvtzkse:9390585ccd0f14a989ad3c75b6d12b45c250fb841bdb5f8de6d656751f32e28d@ec2-184-72-255-211.compute-1.amazonaws.com:5432/d26u82r9rb34qr';
-// const client = new pg.Client(conString);
-const client = new pg.Client(process.env.DATABASE_URL);
+const client = new pg.Client(conString);
+// const client = new pg.Client(process.env.DATABASE_URL);
 client.connect();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
@@ -46,6 +47,17 @@ app.get('/book/:id', (request, response) => {
       response.send(result.rows)})
     .catch(err => console.log(err));
 });
+
+app.get('/admin', (request, response) => {
+  console.log(request.query.token, 'token   ' + TOKEN);
+  if (request.query.token === TOKEN) {
+    console.log(true);
+    response.send(true)
+  } else {
+    console.log(false);
+    response.send(false);
+  }
+})
 
 app.put('/book/update/:id', (request, response) => {
   console.log('this is working');
