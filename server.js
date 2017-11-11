@@ -49,12 +49,11 @@ app.get('/book/:id', (request, response) => {
 });
 
 app.get('/admin', (request, response) => {
-  console.log(request.query.token, 'token   ' + TOKEN);
   if (request.query.token === TOKEN) {
-    console.log(true);
+    console.log('token: ', true);
     response.send(true)
   } else {
-    console.log(false);
+    console.log('token: ', false);
     response.send(false);
   }
 })
